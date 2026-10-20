@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Backtalk</title>
-<meta name="description" content="Highlight text anywhere in Windows and hear it read aloud, in a voice you picked, running entirely on your own machine. No account, no cloud, no data leaving your computer.">
+<meta name="description" content="Highlight text in any Windows app and Backtalk reads it out loud.">
 <link rel="icon" href="img/icon.png">
 <meta property="og:title" content="Backtalk">
-<meta property="og:description" content="Highlight text anywhere in Windows and hear it read aloud. Runs entirely on your own machine.">
+<meta property="og:description" content="Highlight text in any Windows app and Backtalk reads it out loud.">
 <meta property="og:image" content="img/video-poster.jpg">
 <meta property="og:type" content="website">
 <style>
@@ -46,7 +46,6 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
@@ -57,7 +56,6 @@
     -webkit-font-smoothing: antialiased;
   }
   .wrap { width: min(1080px, 92vw); margin: 0 auto; }
-  .narrow { width: min(760px, 92vw); margin: 0 auto; }
   a { color: var(--primary); }
 
   header {
@@ -97,9 +95,7 @@
     font-size: clamp(18px, 2.3vw, 22px); color: var(--muted);
     max-width: 660px; margin: 0 auto 30px;
   }
-  .cta { margin: 0 0 12px; }
-  .note { font-size: 14px; color: var(--muted); margin: 0; }
-  .note a { color: var(--muted); }
+  .cta { margin: 0; }
 
   .shot {
     margin: 40px auto 0; border-radius: 14px; overflow: hidden;
@@ -109,12 +105,11 @@
 
   section { padding: 76px 0; }
   .band { background: var(--panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  section > .wrap > h2, section > .narrow > h2 {
+  section h2 {
     font-family: var(--display); font-weight: 400;
     font-size: clamp(30px, 4vw, 40px); letter-spacing: -.6px;
-    margin: 0 0 10px;
+    margin: 0 0 30px;
   }
-  .sub { color: var(--muted); margin: 0 0 34px; max-width: 640px; }
 
   .video {
     position: relative; margin: 0 auto; max-width: 900px;
@@ -142,9 +137,15 @@
   }
   .video button:hover .play { transform: scale(1.07); background: var(--primary); }
   .video .play svg { margin-left: 4px; width: 42%; height: auto; }
-  .video-note { text-align: center; font-size: 13px; color: var(--muted); margin: 14px 0 0; }
 
-  .cols { display: grid; gap: 34px 46px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .cards { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px 24px;
+    font-size: 18px; font-weight: 600; text-align: center;
+  }
+
+  .cols { display: grid; gap: 34px 46px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .cols h3 {
     margin: 0 0 12px; font-size: 13px; letter-spacing: .8px;
     text-transform: uppercase; color: var(--muted); font-weight: 600;
@@ -157,32 +158,12 @@
     width: 7px; height: 7px; border-radius: 50%; background: var(--primary);
   }
 
-  .privacy-lead {
-    font-size: clamp(19px, 2.4vw, 23px); line-height: 1.5;
-    margin: 0 0 30px; max-width: 700px;
-  }
-  .privacy-grid { display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: 6px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 22px 24px;
-  }
-  .card h3 { margin: 0 0 7px; font-size: 17px; letter-spacing: -.1px; }
-  .card p { margin: 0; font-size: 15px; color: var(--muted); line-height: 1.55; }
-
-  .langs { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
-  .langs li {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 999px; padding: 7px 16px; font-size: 15px;
-  }
-  .langs li span { color: var(--muted); font-size: 13px; margin-left: 5px; }
-
   .gallery {
-    display: grid; gap: 26px; margin-top: 34px;
+    display: grid; gap: 26px;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
   .gallery figure { margin: 0; }
-  .gallery h3 { margin: 0 0 3px; font-size: 16px; letter-spacing: -.1px; color: var(--text); }
-  .gallery figcaption { margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+  .gallery figcaption { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
   .gallery .frame {
     border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
     background: var(--surface); box-shadow: var(--shadow);
@@ -192,45 +173,18 @@
   .gallery .frame.contain { background: var(--panel); }
   .gallery .frame.contain img { object-fit: contain; padding: 20px; }
 
-  .get { text-align: center; }
-  .get .dl.big { margin: 10px 0 16px; }
-  .reqs { margin-top: 44px; text-align: left; }
-  .reqs table { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .reqs th, .reqs td { text-align: left; padding: 11px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
-  .reqs th { width: 40%; font-weight: 600; color: var(--muted); font-size: 14px; }
-  .reqs tr:last-child th, .reqs tr:last-child td { border-bottom: 0; }
-
-  .warn {
-    margin-top: 40px; text-align: left;
-    background: var(--surface); border: 1px solid var(--border);
-    border-left: 3px solid var(--primary);
-    border-radius: 10px; padding: 22px 26px;
-  }
-  .warn h3 { margin: 0 0 10px; font-size: 17px; }
-  .warn p { margin: 0 0 12px; font-size: 15px; color: var(--muted); }
-  .warn p:last-child { margin-bottom: 0; }
-  .warn code {
-    font-family: ui-monospace, Consolas, monospace; font-size: 12.5px;
-    background: var(--panel); padding: 3px 7px; border-radius: 5px;
-    word-break: break-all; color: var(--text);
-  }
-
   footer {
     border-top: 1px solid var(--border);
     padding: 34px 0 44px; color: var(--muted); font-size: 14px;
     text-align: center;
   }
   footer p { margin: 0 0 10px; }
-  footer a { font-size: 14px; }
 
   @media (max-width: 720px) {
     section { padding: 58px 0; }
     .hero { padding: 54px 0 8px; }
     .bar .gh { font-size: 13px; }
     .dl { padding: 7px 14px; font-size: 13px; }
-    .video .play { width: 62px; height: 62px; }
-    .reqs th { width: auto; display: block; padding-bottom: 2px; border-bottom: 0; }
-    .reqs td { display: block; padding-top: 0; }
   }
 </style>
 </head>
@@ -242,7 +196,7 @@
     <span class="name">Backtalk</span>
     <div class="bar-right">
       <a href="https://github.com/7th-Life-Studios/Backtalk" class="gh">GitHub</a>
-      <a class="dl" href="#get">Download</a>
+      <a class="dl" href="https://github.com/7th-Life-Studios/Backtalk/releases/download/v1.0.0/Backtalk-Setup.exe">Download</a>
       <button id="themeBtn" type="button">Dark</button>
     </div>
   </div>
@@ -250,24 +204,16 @@
 
 <div class="wrap hero">
   <h1>Listen to anything.</h1>
-  <p class="lede">
-    Highlight text in any Windows app. Backtalk reads it aloud in a voice you
-    picked, at a speed you set, on your own machine. Nothing you read is sent
-    anywhere.
-  </p>
-  <p class="cta"><a class="dl big" href="#get">Download for Windows</a></p>
-  <p class="note">Free and open source.</p>
+  <p class="lede">Highlight text in any Windows app and Backtalk reads it out loud.</p>
+  <p class="cta"><a class="dl big" href="https://github.com/7th-Life-Studios/Backtalk/releases/download/v1.0.0/Backtalk-Setup.exe">Download for Windows</a></p>
 
   <div class="shot">
-    <img src="img/dark-0-reader.png" alt="Backtalk reading highlighted text">
+    <img src="img/dark-0-reader.png" alt="Backtalk reader">
   </div>
 </div>
 
 <section class="band">
   <div class="wrap">
-    <h2>See it work</h2>
-    <p class="sub">A minute and change, start to finish.</p>
-
     <div class="video" id="video" data-id="c9bfuz1jYsI">
       <img src="img/video-poster.jpg" alt="">
       <button type="button" aria-label="Play the Backtalk video">
@@ -278,93 +224,32 @@
         </span>
       </button>
     </div>
-    <p class="video-note">
-      The video loads from YouTube only when you press play. Nothing is
-      requested from Google until then.
-    </p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2>It runs on your computer</h2>
-    <p class="privacy-lead">
-      Backtalk has no server. The voices, the reading and the translation all
-      happen on the machine in front of you. That is not a setting you turn on.
-      There is nowhere else for any of it to go.
-    </p>
-
-    <div class="privacy-grid">
-      <div class="card">
-        <h3>Your text stays put</h3>
-        <p>
-          Text you highlight is read by a voice engine running on your own
-          machine. It is never uploaded, never queued for processing somewhere
-          else, and never logged off the device.
-        </p>
-      </div>
-      <div class="card">
-        <h3>No account, ever</h3>
-        <p>
-          No sign-in, no email, no API key, no licence server. Install it and it
-          works. Backtalk does not know who you are and has no way to find out.
-        </p>
-      </div>
-      <div class="card">
-        <h3>No telemetry</h3>
-        <p>
-          Nothing is counted, timed or reported. There is no analytics, no crash
-          reporting and no usage data, because there is no service collecting it.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Translation is offline too</h3>
-        <p>
-          Language packs are downloaded once during install and then live on your
-          disk. Translating a sentence does not touch the network.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Your files, your folders</h3>
-        <p>
-          Reading history and exported audio are ordinary files in folders you
-          choose in Settings. Move them, back them up, or delete them. It is your
-          disk.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Works with the internet off</h3>
-        <p>
-          After install, unplug it. Everything except downloading a new language
-          pack keeps working exactly the same.
-        </p>
-      </div>
+    <h2>Locally hosted and private.</h2>
+    <div class="cards">
+      <div class="card">Works offline</div>
+      <div class="card">No account</div>
+      <div class="card">No telemetry</div>
     </div>
-
-    <p class="sub" style="margin: 34px 0 0;">
-      None of that has to be taken on trust. The source is public, so you can
-      read the network code yourself, or watch it with any traffic monitor you
-      like.
-    </p>
   </div>
 </section>
 
 <section class="band">
   <div class="wrap">
-    <h2>What it does</h2>
-    <p class="sub">The full specification.</p>
-
+    <h2>Features</h2>
     <div class="cols">
       <div>
         <h3>Reading</h3>
         <ul class="spec">
-          <li>Highlight to read, from any application</li>
-          <li>Typed and pasted text</li>
-          <li>Auto-speak, on or off</li>
-          <li>Playback speed, adjustable mid-sentence</li>
-          <li>Skip back and forward ten seconds</li>
-          <li>Scrub bar with elapsed time</li>
-          <li>Volume control</li>
+          <li>Highlight to read</li>
+          <li>Type or paste text</li>
+          <li>Auto speak</li>
+          <li>Adjustable speed</li>
+          <li>Skip back and forward</li>
           <li>WAV export</li>
         </ul>
       </div>
@@ -373,31 +258,24 @@
         <ul class="spec">
           <li>55 voices</li>
           <li>8 languages</li>
-          <li>Browse one language at a time</li>
-          <li>Voice type and pitch listed for every voice</li>
-          <li>Star a voice to pin it to the top</li>
-          <li>Tick the voices you want in the Reader</li>
-          <li>Double-click to hear a voice before choosing it</li>
+          <li>Favorites</li>
+          <li>Voice preview</li>
         </ul>
       </div>
       <div>
         <h3>Translation</h3>
         <ul class="spec">
-          <li>Offline translation, 7 languages</li>
-          <li>Pick a voice, hear your text in that language</li>
-          <li>Original and translation shown together</li>
-          <li>Read as written, leaving foreign text in its own language</li>
-          <li>Automatic voice switching by detected language</li>
+          <li>Offline translation</li>
+          <li>8 languages</li>
+          <li>Automatic language detection</li>
         </ul>
       </div>
       <div>
-        <h3>The application</h3>
+        <h3>App</h3>
         <ul class="spec">
           <li>Compact player</li>
-          <li>Reading history, sortable and replayable</li>
+          <li>Reading history</li>
           <li>Light and dark themes</li>
-          <li>Chooseable storage locations</li>
-          <li>Windows installer, no command line</li>
         </ul>
       </div>
     </div>
@@ -406,144 +284,32 @@
 
 <section>
   <div class="wrap">
-    <h2>55 voices, 8 languages</h2>
-    <p class="sub">
-      Every voice is installed with the app. Translation into the seven
-      non-English languages is optional and you pick which ones during install.
-    </p>
-    <ul class="langs">
-      <li>English <span>29 voices</span></li>
-      <li>Chinese <span>8 voices</span></li>
-      <li>Japanese <span>5 voices</span></li>
-      <li>Hindi <span>4 voices</span></li>
-      <li>Spanish <span>3 voices</span></li>
-      <li>Portuguese <span>3 voices</span></li>
-      <li>Italian <span>2 voices</span></li>
-      <li>French <span>1 voice</span></li>
-    </ul>
-  </div>
-</section>
-
-<section class="band">
-  <div class="wrap">
-    <h2>A look inside</h2>
-    <p class="sub">Light and dark, both built in.</p>
-
+    <h2>Screenshots</h2>
     <div class="gallery">
-
       <figure>
-        <h3>Reader</h3>
-        <figcaption>Highlighted text lands here and starts reading.</figcaption>
-        <div class="frame">
-          <img src="img/dark-0-reader.png" alt="The reader screen with voice and speed controls">
-        </div>
+        <figcaption>Reader</figcaption>
+        <div class="frame"><img src="img/dark-0-reader.png" alt="Reader"></div>
       </figure>
-
       <figure>
-        <h3>Voices</h3>
-        <figcaption>Eight languages, opened one at a time.</figcaption>
-        <div class="frame">
-          <img src="img/light-2-voices.png" alt="Voice picker grouped by language">
-        </div>
+        <figcaption>Voices</figcaption>
+        <div class="frame"><img src="img/light-2-voices.png" alt="Voices"></div>
       </figure>
-
       <figure>
-        <h3>History</h3>
-        <figcaption>Everything you have had read back, ready to replay.</figcaption>
-        <div class="frame">
-          <img src="img/dark-1-history.png" alt="Reading history table">
-        </div>
+        <figcaption>History</figcaption>
+        <div class="frame"><img src="img/dark-1-history.png" alt="History"></div>
       </figure>
-
       <figure>
-        <h3>Settings</h3>
-        <figcaption>Volume, default speed, theme, translation behaviour, and where files go.</figcaption>
-        <div class="frame">
-          <img src="img/light-3-settings.png" alt="Settings screen">
-        </div>
+        <figcaption>Settings</figcaption>
+        <div class="frame"><img src="img/light-3-settings.png" alt="Settings"></div>
       </figure>
-
       <figure>
-        <h3>Compact player</h3>
-        <figcaption>A small floating window that stays above your work.</figcaption>
-        <div class="frame contain">
-          <img src="img/dark-4-widget.png" alt="The floating compact player">
-        </div>
+        <figcaption>Compact player</figcaption>
+        <div class="frame contain"><img src="img/dark-4-widget.png" alt="Compact player"></div>
       </figure>
-
       <figure>
-        <h3>Light mode</h3>
-        <figcaption>The same reader, in the lighter theme.</figcaption>
-        <div class="frame">
-          <img src="img/light-0-reader.png" alt="The reader screen in light mode">
-        </div>
+        <figcaption>Light mode</figcaption>
+        <div class="frame"><img src="img/light-0-reader.png" alt="Reader in light mode"></div>
       </figure>
-
-    </div>
-  </div>
-</section>
-
-<section id="get">
-  <div class="narrow get">
-    <h2>Get Backtalk</h2>
-    <p class="sub" style="margin-left: auto; margin-right: auto;">
-      One installer. Tick the languages you want and it downloads only those.
-    </p>
-
-    <p><a class="dl big" href="https://github.com/7th-Life-Studios/Backtalk/releases/download/v1.0.0/Backtalk-Setup.exe">Download Backtalk 1.0.0</a></p>
-    <p class="note">
-      Windows 10 and 11, 64-bit &middot;
-      <a href="https://github.com/7th-Life-Studios/Backtalk/releases/latest">Other downloads</a>
-    </p>
-
-    <div class="reqs">
-      <table>
-        <tr>
-          <th>Download size</th>
-          <td>The installer shows the download size for the languages you pick.</td>
-        </tr>
-        <tr>
-          <th>Disk space</th>
-          <td>3.6 GB installed. 5.1 GB with every translation language.</td>
-        </tr>
-        <tr>
-          <th>Operating system</th>
-          <td>Windows 10 or Windows 11, 64-bit. The installer will not run on 32-bit Windows.</td>
-        </tr>
-        <tr>
-          <th>Permissions</th>
-          <td>Administrator, because it installs to Program Files by default. You can choose a different folder.</td>
-        </tr>
-        <tr>
-          <th>Internet</th>
-          <td>Needed during install to fetch the voice engine and any language packs you ticked. Not needed afterwards.</td>
-        </tr>
-        <tr>
-          <th>Prerequisites</th>
-          <td>None. No Python, no command line, no setup steps.</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="warn">
-      <h3>Windows will warn you about this file. Here is why.</h3>
-      <p>
-        Backtalk is not code-signed yet. A signing certificate costs a few
-        hundred dollars a year, and this is a free application, so for now it
-        ships without one.
-      </p>
-      <p>
-        When you run the installer, Windows shows a blue box saying
-        "Windows protected your PC". Click <strong>More info</strong>, then
-        <strong>Run anyway</strong>. That warning means the file is unsigned. It
-        does not mean anything was found in it.
-      </p>
-      <p>
-        If you would rather check for yourself, here is the SHA-256 of
-        <code>Backtalk-Setup.exe</code>. Compare it against your download with
-        <code>certutil -hashfile Backtalk-Setup.exe SHA256</code>.
-      </p>
-      <p><code>6cd2e678a6a69173227ad70a596d0903398c1549c98e53f8e6227eab483aaa32</code></p>
     </div>
   </div>
 </section>
@@ -560,12 +326,12 @@
       and <a href="https://github.com/moses-palmer/pynput">pynput</a>.
     </p>
     <p>
-      Backtalk is MIT licensed.
+      MIT licensed.
       <a href="https://github.com/7th-Life-Studios/Backtalk/blob/main/THIRD-PARTY-LICENSES.md">Third-party licences</a>
       &middot;
       <a href="https://github.com/7th-Life-Studios/Backtalk">Source</a>
     </p>
-    <p>A 7th Life Studios project.</p>
+    <p>Copyright 2026 7th Life Studios</p>
   </div>
 </footer>
 
